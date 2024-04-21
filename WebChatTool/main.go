@@ -8,9 +8,10 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var clients = make(map[*websocket.Conn]bool)
-var broadcast = make(chan Message)
+var clients = make(map[*websocket.Conn]bool) // 接続先のクライアント情報・フラグ
+var broadcast = make(chan Message)           // サーバーとクライアント間のチャネル
 
+// メッセージ送受信用の型
 type Message struct {
 	Type    int
 	Message []byte
@@ -19,7 +20,7 @@ type Message struct {
 func main() {
 	r := gin.Default()
 
-	// websocketのupgraderを定期
+	// websocketのupgraderを定期　(初期設定)
 	wsupgrader := websocket.Upgrader{
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
@@ -58,17 +59,21 @@ func main() {
 	// 非同期でhandleMessagesを実行
 	go handleMessages()
 
+	// サーバーの起動
 	r.Run(":4001")
 }
 
 // broadcastにメッセージがあれば、clientsに格納されている全てのコネクションへ送信する
 func handleMessages() {
 	for {
+		// メッセージをチャネルから受信
 		message := <-broadcast
 
 		for client := range clients {
+			// 全クライアントに受信メッセージを送信
 			err := client.WriteMessage(message.Type, message.Message)
 			if err != nil {
+				// Error時、クライアントを切断・配列から削除
 				log.Printf("error: %v", err)
 				client.Close()
 				delete(clients, client)

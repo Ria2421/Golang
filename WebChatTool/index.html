@@ -40,7 +40,7 @@
     };
 
     // サーバーから他ユーザーのメッセージが送られてきた際に、チャット画面へ表示させる。
-    ws.onmessage = function (msg) {
+    ws.onmessage = function (msg) { // ws.onmessageに指定した関数の処理を代入する onmessageはメッセージを受け取った時に勝手に呼ばれる
         console.log(msg);   // 受け取った文字列をコンソールに表示
         var line =  now() + " : " + msg.data + "\n";    // 時間 + 文字列 + 改行
         chat.innerText += line;     // チャットのインナーテキストに文字列を追加

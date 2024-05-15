@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  api:
+    container_name: login-go-api
+    build:
+      dockerfile: Dockerfile
+      context: .
+    volumes:
+      - ".:/app"
+    ports:
+      - "8000:8000"

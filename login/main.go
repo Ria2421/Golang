@@ -1,16 +1,37 @@
 package main
 
 import (
-	"github.com/labstack/echo/v4"
-	"net/http"
+	"fmt"
+	"login-go/auth"
+	"login-go/db"
+	"login-go/mail"
+
+	"github.com/go-playground/validator/v10"
 )
 
 func main() {
-	e := echo.New()
+	db, err := db.NewDB()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer db.Close()
 
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "hoge")
-	})
+	mailer := mail.NewMailhogMailer()
+
+	jwter, err := auth.NewJwtBuilder()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	e := NewRouter(db, mailer, jwter)
+
+	// error_handler.goの内容を登録してます。
+	e.HTTPErrorHandler = customHTTPErrorHandler
+
+	// validator.goの内容を登録してます。
+	e.Validator = &CustomValidator{validator: validator.New()}
 
 	e.Logger.Fatal(e.Start(":8000"))
 }

@@ -1,5 +1,21 @@
-### GET request to example server
-GET https://examples.http-client.intellij.net/get
-    ?generated-in=GoLand
+###
+POST localhost:8000/api/auth/register/initial
+Content-Type: application/json
+
+{"email": "test-user-1@example.xyz", "password": "foobar"}
 
 ###
+POST localhost:8000/api/auth/register/complete
+Content-Type: application/json
+
+{"email": "test-user-1@example.xyz", "token": "zvXEiiK0"}
+
+###
+POST localhost:8000/api/auth/login
+Content-Type: application/json
+
+{"email": "test-user-1@example.xyz", "password": "foobar"}
+
+###
+GET localhost:8000/api/restricted/user/me
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc0ODc5NzQsImlhdCI6MTcxNzQ4NjE3NCwiaXNzIjoibG9naW4tZ28iLCJzdWIiOiJhY2Nlc3MtdG9rZW4iLCJ1c2VyX2lkIjoxMDAwMDJ9.EfZdQetyicGatrpJIWzm1__xo_ebR9CnwQI3_bJr0bLenb0kn8m4A80_kc16N9XHSSI24trjDTtmDsM-KIAjPe8a1xQ1B0P-KYjb3Tgy1wlUKQMBp8Fp4hIpqYzYElKAt6ZS5DEmjHZjQ2nk_bT__v4TlsEJPLx6QZwRpG1xPkcRi9rgSUqpTpKsNXsEAfybzZox-dtFdQDBWqg2NMepEZW0r013VP20zn_hjdj0F5HuB-wqCoj3HFZBDMKUzZlX79hFG0CvUr6__D9tYW3JIh-eEpQnM62ulFBLVndF8nBhuGISgmS-S1_3LOuTgEwf0OG10RxwjkfScYD83ncc7A
